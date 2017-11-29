@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+	<head>
+		
+		<title>Phylogenetics using Variational Inference</title>
+	
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+	
+		<link rel="stylesheet" href="theme.css" id="theme">
+
+		<!-- Printing and PDF exports -->
+<!-- 
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+ -->
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3 class="title">Phylogenetics using Variational Inference</h3>
+<br>
+                    Mathieu&nbsp;Fourment
+<br>
+<br>
+                    <div class="institution">ithree institute<br>
+                    University of Technology Sydney</div>
+
+                    <div class="date">9<sup>th</sup> Phylomania Meeting<br>
+                        6-8 December, 2017</div>
+                </section>
+                
+                <section>
+                	<h2>Approximating Distribution in Phylogenetics</h2>
+                	<ul>
+                		<li>Usually approximate posterior with MCMC and propose parameters one by one</li>
+                		<li>Adaptive MCMC to jointly proposal parameters</li>
+                		<li>Independence sampler </li>
+                	</ul>
+                </section>
+                
+                <section>
+                	<h2>Approximating the distribution of a branch length</h2>
+					<ul>
+                		<li>Fitting parametric distribution</li>
+                		<li>Goal is to improve sampling the tree space</li>
+                	</ul>
+					<div class="figure" style="float:left;width:90%">
+                		<img style="width:400px" data-src="aberer.png"/>
+                	</div>
+                	<div style="float:right;width:10%">
+                		<p style="font-size:15px;position: absolute;
+  bottom: 0;
+  right: 0;">Aberer, Stamatakis, Ronquist 2016</p>
+                	</div>
+                </section>
+                
+                <section>
+                	<h2>Approximating the distribution of a branch length</h2>
+					<ul>
+                		<li>Fitting a simpler distribution:</li>
+                		<li>$$ f(c, m, r, b; t) = c \log \left ( \frac{1 + e^{(r(t + b))^{-1}}}{2} \right ) + m \log \left(\frac{1 - e^{(r(t + b))^{-1}}}{2} \right) $$</li>
+                		<li>Nonlinear least-squares optimization</li>
+                		<li>Sampling from surrogate function using rejection sampling</li>
+                	</ul> 
+<!--                	<img style="width:800px" data-src="aberer.png"/> -->
+                 	<p style="font-size:15px">Claywell, Dinh, Fourment, McCoy, Matsen 2017</p>
+ 
+                </section>
+                
+                <section>
+					<h2>Variational inference</h2>
+					<p>Minimize the Kullback Leibler divergence from variational distribution $q$ to posterior distribution $p$</p>
+					$$ \boldsymbol{\phi}^* = \operatorname*{arg\,min}_{\boldsymbol{\phi} \in \boldsymbol{\Phi}}  \operatorname{KL}(q(\boldsymbol{\theta}; \boldsymbol{\phi}) \parallel p(\boldsymbol{\theta} \mid \mathbf{x})) $$
+				</section>
+				
+				<section>
+					<h2>Evidence lower bound (ELBO)</h2>
+					\[ \begin{aligned} \operatorname{KL}(q(\boldsymbol{\theta}; \boldsymbol{\phi}) \parallel p(\boldsymbol{\theta} \mid \mathbf{x})) &amp; = \mathop{\mathbb{E}}[\log q(\boldsymbol{\theta})] - \mathop{\mathbb{E}}[\log p(\boldsymbol{\theta} \mid \mathbf{x})] \\
+					&amp; = \mathop{\mathbb{E}}[\log q(\boldsymbol{\theta})] - \mathop{\mathbb{E}}[\log p(\boldsymbol{\theta}, \mathbf{x})] + \log p(\mathbf{x})
+					 \end{aligned}\]
+					 <div class="fragment">
+					 	<p>$p(\mathbf{x})$ constant with respect to $q(\boldsymbol{\theta})$</p>
+					 </div>
+					 <div class="fragment">
+					<p>Instead of minimizing KL divergence, maximize evidence lower bound:</p>
+					
+					$$ \textrm{ELBO}(q) = \mathop{\mathbb{E}}_{q(\boldsymbol{\theta}; \boldsymbol{\phi})}[\log p(\mathbf{x}, \boldsymbol{\theta}) - \log q(\boldsymbol{\theta}; \boldsymbol{\phi})]$$
+					</div>
+					<div class="fragment">
+					<p>ELBO(q) is the lower bound of evidence:</p>
+						$$\log p(\mathbf{x}) \geq \textrm{ELBO}(q)$$
+					</div>
+				</section>
+				
+				<section>
+					<h2>Variational distributions</h2>
+					<div class="fragment">
+						<p>Mean-field Gaussian:</p>
+						$$ q(\boldsymbol{\theta}; \boldsymbol{\phi}) = \mathcal{N}(\boldsymbol{\theta}; \boldsymbol{\mu}, diag(\boldsymbol{\sigma}^2)) = \prod_{i=1}^n \mathcal{N}(\theta_i; \mu_i, \sigma_i^2) $$
+					</div>
+					<div class="fragment">
+						<p>Full-rank Gaussian:</p>
+						$$ q(\boldsymbol{\theta}; \boldsymbol{\phi}) = \mathcal{N}(\boldsymbol{\theta}; \boldsymbol{\mu}, \boldsymbol{\Sigma}) $$
+					</div>
+				</section>
+				
+				<section>
+					<h2> Variational inference software</h2>
+					<ul>
+						<li>Stan (Automatic differentiation; HMC, MCMC)</li>
+						<li>Edward, BayesPi...</li>
+						<li>Even Uber with Pyro</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Simple Stan model</h2>
+					<img style="width:800px" data-src="stan.png"/>
+				</section>
+				
+				<section>
+					<h2>Jukes Cantor model in Stan</h2>
+					<img style="height:40%; width:40%" data-src="jc69.png"/>
+				</section>
+				
+				<section>
+					<h2>Simulation study</h2>
+					<div class="figure" style="float:left;width:50%">
+                		<ul>
+						<li>Random coalescent tree with 6 taxa</li>
+						<li>Simulate alignment with GTR</li>
+						<li>Every ranked labelled tree was enumerated (2700 phylogenies)</li>
+						<li>Analyse with BEAST and Stan</li>
+					</ul>
+                	</div>
+                	<div style="float:right;width:50%">
+						<img style="width:800px;;" data-src="simtree.pdf"/>
+                	</div>
+				</section>
+				
+				<section>
+					<h2>Estimates using true tree</h2>
+					<img style="width:500px;" data-src="estimates-true-tree.pdf"/>
+				</section>
+				
+				<section>
+					<h2>Marginal likelihood vs. ELBO</h2>
+					<img style="width:500px;" data-src="elbo-marginal.pdf"/>
+				</section>
+				
+				<section>
+					<h2>Marginal likelihood vs. ELBO</h2>
+					<img style="width:500px;" data-src="elbo-marginal-clean.pdf"/>
+				</section>
+				
+				<section>
+					<h2>Parameter correlation</h2>
+					<img style="width:500px;" data-src="heatmap.mcmc.true-tree.pdf"/>
+				</section>
+				
+				<section>
+					<h2>Parameter correlation</h2>
+					<img style="width:500px;" data-src="heatmap.fluA.pdf"/>
+				</section>
+				
+				<section>
+					<h2>Parameter correlation</h2>
+					<img style="width:300px;" data-src="heatmap.mcmc.true-tree.pdf"/>
+					<img style="width:300px;" data-src="heatmap.vb.mf.true-tree.pdf"/>
+					<img style="width:300px;" data-src="heatmap.vb.fullrank.true-tree.pdf"/>
+				</section>
+				
+				<section>
+					<h2>Acknowledgements</h2>
+					Aaron Darling
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+// 			Reveal.configure({ slideNumber: true });
+			Reveal.initialize({
+			slideNumber: 'c/t',
+				progress: true,
+				math: {
+                    mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                    config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+                },
+				dependencies: [
+					{ src: 'plugin/math/math.js', async: true },
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
