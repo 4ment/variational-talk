@@ -118,11 +118,19 @@
 				</section>
 				
 				<section>
+					<h2>Algorithm</h2>
+					<ul>
+						<li>Stochastic gradient ascent to optimize the ELBO</li>
+						<li>Requires calculating gradient of probability models</li>
+						<li>Transformation of constrained variables (e.g. branch length lives in $\mathbb{R}^+$)</li>
+					</ul>
+				</section>
+				
+				<section>
 					<h2> Variational inference software</h2>
 					<ul>
 						<li>Stan (Automatic differentiation; HMC, MCMC)</li>
-						<li>Edward, BayesPi...</li>
-						<li>Even Uber with Pyro</li>
+						<li>Edward, BayesPi, Pyro (Uber) ...</li>
 					</ul>
 				</section>
 				
@@ -181,6 +189,25 @@
 					<img style="width:300px;" data-src="heatmap.mcmc.true-tree.pdf"/>
 					<img style="width:300px;" data-src="heatmap.vb.mf.true-tree.pdf"/>
 					<img style="width:300px;" data-src="heatmap.vb.fullrank.true-tree.pdf"/>
+				</section>
+				
+				<section>
+					<h2>Some ideas</h2>
+					<ul>
+						<li>Reducing the number parameters</li>
+						<li>Setting covariances to 0</li>
+						<li>We should not expect any correlation between branches that are far appart</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Summary</h2>
+					<ul>
+						<li>Testing sparse covariance matrix for full-rank model</li>
+						<li>Not possible in Stan, working on a specialised phylogenetic variational program</li>
+						<li>Combining multiple trees</li>
+						<li>Investigate other divergence measures (lower and upper bound of marginal likelihood)</li>
+					</ul>
 				</section>
 				
 				<section>
