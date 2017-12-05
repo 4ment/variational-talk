@@ -38,21 +38,24 @@
                     <div class="institution">ithree institute<br>
                     University of Technology Sydney</div>
 
+<!-- 
                     <div class="date">9<sup>th</sup> Phylomania Meeting<br>
                         6-8 December, 2017</div>
+ -->
                 </section>
                 
                 <section>
-                	<h2>Approximating Distribution in Phylogenetics</h2>
+                	<h2>Approximating Distributions in Phylogenetics</h2>
                 	<ul>
                 		<li>Usually approximate posterior with MCMC and propose parameters one by one</li>
-                		<li>Adaptive MCMC to jointly proposal parameters</li>
-                		<li>Independence sampler </li>
+                		<li>Independence sampler (Aberer et al 2016)</li>
+                		<li>Sampling likelihood function using specialised surrogate function (Claywell et al 2017)</li>
+						<li>Adaptive MCMC to jointly propose parameters (Baele et al. 2017)</li>
                 	</ul>
                 </section>
                 
                 <section>
-                	<h2>Approximating the distribution of a branch length</h2>
+                	<h2>Approximating the distribution of one branch length</h2>
 					<ul>
                 		<li>Fitting parametric distribution</li>
                 		<li>Goal is to improve sampling the tree space</li>
@@ -72,6 +75,7 @@
 					<ul>
                 		<li>Fitting a simpler distribution:</li>
                 		<li>$$ f(c, m, r, b; t) = c \log \left ( \frac{1 + e^{(r(t + b))^{-1}}}{2} \right ) + m \log \left(\frac{1 - e^{(r(t + b))^{-1}}}{2} \right) $$</li>
+                		<li>Parameters: c (# constant sites), m (# mutated sites), r (rate), b (truncation)</li>
                 		<li>Nonlinear least-squares optimization</li>
                 		<li>Sampling from surrogate function using rejection sampling</li>
                 		<li>Improved the efficiency of SMC sampler (see poster)</li>
@@ -86,6 +90,7 @@
 					<h2>Variational inference</h2>
 					<p>Minimize the Kullback Leibler divergence from variational distribution $q$ to posterior distribution $p$</p>
 					$$ \boldsymbol{\phi}^* = \operatorname*{arg\,min}_{\boldsymbol{\phi} \in \boldsymbol{\Phi}}  \operatorname{KL}(q(\boldsymbol{\theta}; \boldsymbol{\phi}) \parallel p(\boldsymbol{\theta} \mid \mathbf{x})) $$
+					<p style="font-size:15px">Review: Blei, Kucukelbir, McAuliffe 2016</p>
 				</section>
 				
 				<section>
@@ -132,7 +137,7 @@
 					<h2> Variational inference software</h2>
 					<ul>
 						<li>Stan (Automatic differentiation; HMC, MCMC)</li>
-						<li>Edward, BayesPi, Pyro (Uber) ...</li>
+						<li>Edward, BayesPi, PyMC3, Pyro (Uber) ...</li>
 					</ul>
 				</section>
 				
@@ -142,8 +147,8 @@
 				</section>
 				
 				<section>
-					<h2>Jukes Cantor model in Stan</h2>
-					<img style="height:40%; width:40%" data-src="jc69.png"/>
+<!-- 					<h3 style="font-size:15px">Jukes Cantor model in Stan</h3> -->
+					<img style="height:80%; width:80%" data-src="jc69.png"/>
 				</section>
 				
 				<section>
@@ -152,45 +157,47 @@
                 		<ul>
 						<li>Random coalescent tree with 6 taxa</li>
 						<li>Simulate alignment with GTR</li>
-						<li>Every ranked labelled tree was enumerated (2700 phylogenies)</li>
+						<li>Every ranked labelled tree was enumerated (2700 topologies)</li>
 						<li>Analyse with BEAST and Stan</li>
 					</ul>
                 	</div>
                 	<div style="float:right;width:50%">
-						<img style="width:800px;;" data-src="simtree.pdf"/>
+						<img style="width:800px;;" data-src="simtree.png"/>
                 	</div>
 				</section>
 				
 				<section>
 					<h2>Estimates using true tree</h2>
-					<img style="width:500px;" data-src="estimates-true-tree.pdf"/>
+					<img style="width:500px;" data-src="estimates-true-tree.svg"/>
 				</section>
 				
 				<section>
 					<h2>Marginal likelihood vs. ELBO</h2>
-					<img style="width:500px;" data-src="elbo-marginal.pdf"/>
+					<img style="width:500px;" data-src="elbo-marginal.svg"/>
 				</section>
 				
 				<section>
 					<h2>Marginal likelihood vs. ELBO</h2>
-					<img style="width:500px;" data-src="elbo-marginal-clean.pdf"/>
+					<img style="width:500px;" data-src="elbo-marginal-clean.svg"/>
+					
+					<p style="font-size:15px">Slope=0.99 Intercept=-11.9</p>
 				</section>
 				
 				<section>
 					<h2>Parameter correlation</h2>
-					<img style="width:500px;" data-src="heatmap.mcmc.true-tree.pdf"/>
+					<img style="width:500px;" data-src="heatmap.mcmc.true-tree.svg"/>
 				</section>
 				
 				<section>
 					<h2>Parameter correlation</h2>
-					<img style="width:500px;" data-src="heatmap.fluA.pdf"/>
+					<img style="width:500px;" data-src="heatmap.fluA.svg"/>
 				</section>
 				
 				<section>
 					<h2>Parameter correlation</h2>
-					<img style="width:300px;" data-src="heatmap.mcmc.true-tree.pdf"/>
-					<img style="width:300px;" data-src="heatmap.vb.mf.true-tree.pdf"/>
-					<img style="width:300px;" data-src="heatmap.vb.fullrank.true-tree.pdf"/>
+					<img style="width:300px;" data-src="heatmap.mcmc.true-tree.svg"/>
+					<img style="width:300px;" data-src="heatmap.vb.mf.true-tree.svg"/>
+					<img style="width:300px;" data-src="heatmap.vb.fullrank.true-tree.svg"/>
 				</section>
 				
 				<section>
@@ -214,7 +221,16 @@
 				
 				<section>
 					<h2>Acknowledgements</h2>
-					Aaron Darling
+					<br>
+					<ul>
+						<li>Aaron Darling, University of Technology Sydney<br><br></li>
+						<li>The following organizations:<br><br>
+							<div style="text-align:center">
+								<img data-src="ausgem.png" style="box-shadow:none;height:80px">
+								<img data-src="uts.svg" style="box-shadow:none;background-color:#002b36;height:80px">
+							</div>
+						</li>
+        			</ul>
 				</section>
 			</div>
 		</div>
