@@ -45,20 +45,20 @@
                 </section>
                 
                 <section>
-                	<h2>Approximating Distributions in Phylogenetics</h2>
+                	<h3>Approximating Distributions in Phylogenetics</h3>
                 	<ul>
                 		<li>Usually approximate posterior with MCMC and propose parameters one by one</li>
-                		<li>Independence sampler (Aberer et al 2016)</li>
-                		<li>Sampling likelihood function using specialised surrogate function (Claywell et al 2017)</li>
-						<li>Adaptive MCMC to jointly propose parameters (Baele et al. 2017)</li>
+                		<li>Approximate distribution of one branch length using a parametric distribution (<i>Aberer et al. 2016</i>)</li>
+                		<li>Approximate distribution of one branch length using specialised surrogate function (<i>Claywell et al. 2017</i>)</li>
+						<li>Adaptive MCMC to jointly propose parameters (<i>Baele et al. 2017</i>)</li>
                 	</ul>
                 </section>
                 
                 <section>
-                	<h2>Approximating the distribution of one branch length</h2>
+                	<h3>Approximating the distribution of one branch length</h3>
 					<ul>
                 		<li>Fitting parametric distribution</li>
-                		<li>Goal is to improve sampling the tree space</li>
+                		<li>Goal is to improve sampling the tree space using an independence sampler</li>
                 	</ul>
 					<div class="figure" style="float:left;width:90%">
                 		<img style="width:400px" data-src="aberer.png"/>
@@ -66,12 +66,12 @@
                 	<div style="float:right;width:10%">
                 		<p style="font-size:15px;position: absolute;
   bottom: 0;
-  right: 0;">Aberer, Stamatakis, Ronquist 2016</p>
+  right: 0;">Aberer, Stamatakis, Ronquist. Syst Biol 2016</p>
                 	</div>
                 </section>
                 
                 <section>
-                	<h2>Approximating the distribution of a branch length</h2>
+                	<h3>Approximating the distribution of a branch length</h3>
 					<ul>
                 		<li>Fitting a simpler distribution:</li>
                 		<li>$$ f(c, m, r, b; t) = c \log \left ( \frac{1 + e^{(r(t + b))^{-1}}}{2} \right ) + m \log \left(\frac{1 - e^{(r(t + b))^{-1}}}{2} \right) $$</li>
@@ -81,20 +81,20 @@
                 		<li>Improved the efficiency of SMC sampler (see poster)</li>
                 	</ul> 
 <!--                	<img style="width:800px" data-src="aberer.png"/> -->
-                 	<p style="font-size:15px">Claywell, Dinh, Fourment, McCoy, Matsen 2017</p>
-                 	<p style="font-size:15px">Fourment, Claywell, Dinh, McCoy, Matsen, Darling 2017</p>
+                 	<p style="font-size:15px">Claywell, Dinh, Fourment, McCoy, Matsen. MBE 2017</p>
+                 	<p style="font-size:15px">Fourment, Claywell, Dinh, McCoy, Matsen, Darling. Syst Biol 2017</p>
  
                 </section>
                 
                 <section>
-					<h2>Variational inference</h2>
+					<h3>Variational inference</h3>
 					<p>Minimize the Kullback Leibler divergence from variational distribution $q$ to posterior distribution $p$</p>
 					$$ \boldsymbol{\phi}^* = \operatorname*{arg\,min}_{\boldsymbol{\phi} \in \boldsymbol{\Phi}}  \operatorname{KL}(q(\boldsymbol{\theta}; \boldsymbol{\phi}) \parallel p(\boldsymbol{\theta} \mid \mathbf{x})) $$
 					<p style="font-size:15px">Review: Blei, Kucukelbir, McAuliffe 2016</p>
 				</section>
 				
 				<section>
-					<h2>Evidence lower bound (ELBO)</h2>
+					<h3>Evidence lower bound (ELBO)</h3>
 					\[ \begin{aligned} \operatorname{KL}(q(\boldsymbol{\theta}; \boldsymbol{\phi}) \parallel p(\boldsymbol{\theta} \mid \mathbf{x})) &amp; = \mathop{\mathbb{E}}[\log q(\boldsymbol{\theta})] - \mathop{\mathbb{E}}[\log p(\boldsymbol{\theta} \mid \mathbf{x})] \\
 					&amp; = \mathop{\mathbb{E}}[\log q(\boldsymbol{\theta})] - \mathop{\mathbb{E}}[\log p(\boldsymbol{\theta}, \mathbf{x})] + \log p(\mathbf{x})
 					 \end{aligned}\]
@@ -113,7 +113,7 @@
 				</section>
 				
 				<section>
-					<h2>Variational distributions</h2>
+					<h3>Variational distributions</h3>
 					<div class="fragment">
 						<p>Mean-field Gaussian:</p>
 						$$ q(\boldsymbol{\theta}; \boldsymbol{\phi}) = \mathcal{N}(\boldsymbol{\theta}; \boldsymbol{\mu}, diag(\boldsymbol{\sigma}^2)) = \prod_{i=1}^n \mathcal{N}(\theta_i; \mu_i, \sigma_i^2) $$
@@ -125,7 +125,7 @@
 				</section>
 				
 				<section>
-					<h2>Algorithm</h2>
+					<h3>Algorithm</h3>
 					<ul>
 						<li>Stochastic gradient ascent to optimize the ELBO</li>
 						<li>Requires calculating gradient of probability models</li>
@@ -134,25 +134,26 @@
 				</section>
 				
 				<section>
-					<h2> Variational inference software</h2>
+					<h3> Variational inference software</h3>
+					Require calculating derivatives (automatic differentiation)
 					<ul>
-						<li>Stan (Automatic differentiation; HMC, MCMC)</li>
+						<li>Stan (HMC, MCMC)</li>
 						<li>Edward, BayesPi, PyMC3, Pyro (Uber) ...</li>
 					</ul>
 				</section>
 				
 				<section>
-					<h2>Simple Stan model</h2>
+					<h3>Simple Stan model</h3>
 					<img style="width:800px" data-src="stan.png"/>
 				</section>
 				
 				<section>
 <!-- 					<h3 style="font-size:15px">Jukes Cantor model in Stan</h3> -->
-					<img style="height:80%; width:80%" data-src="jc69.png"/>
+					<img style="height:70%; width:70%" data-src="jc69.png"/>
 				</section>
 				
 				<section>
-					<h2>Simulation study</h2>
+					<h3>Simulation study</h3>
 					<div class="figure" style="float:left;width:50%">
                 		<ul>
 						<li>Random coalescent tree with 6 taxa</li>
@@ -167,50 +168,73 @@
 				</section>
 				
 				<section>
-					<h2>Estimates using true tree</h2>
+					<h3>Estimates using true tree</h3>
 					<img style="width:500px;" data-src="estimates-true-tree.svg"/>
 				</section>
 				
 				<section>
-					<h2>Marginal likelihood vs. ELBO</h2>
+					<h3>Marginal likelihood vs. ELBO</h3>
+					<div class="figure" style="float:left;width:50%">
+					<ul>
+						<li>Marginal likelihood calculated using path sampling</li>
+						<li>Stochastic gradient ascent trapped in local maxima</li>
+					</ul>
+					</div>
+					<div class="figure" style="float:right;width:50%">
 					<img style="width:500px;" data-src="elbo-marginal.svg"/>
+					</div>
 				</section>
 				
 				<section>
-					<h2>Marginal likelihood vs. ELBO</h2>
-					<img style="width:500px;" data-src="elbo-marginal-clean.svg"/>
-					
-					<p style="font-size:15px">Slope=0.99 Intercept=-11.9</p>
+					<h3>Marginal likelihood vs. ELBO</h3>
+					<div class="figure" style="float:left;width:50%">
+					<ul>
+						<li>Rerun Stan several times and chose the highest ELBO</li>
+						<li>Slope: 0.99 Intercept: -11.9</li>
+					</ul>
+					</div>
+					<div class="figure" style="float:right;width:50%">
+						<img style="width:500px;" data-src="elbo-marginal-clean.svg"/>
+					</div>
 				</section>
 				
 				<section>
-					<h2>Parameter correlation</h2>
-					<img style="width:500px;" data-src="heatmap.mcmc.true-tree.svg"/>
+					<h3>Parameter correlation from MCMC output</h3>
+					<div class="figure" style="float:left;width:50%">
+					<ul>
+						<li>Heatmap representing correlation matrix (Red=positive, blue: negative correlation )</li>
+						<li>Strong correlation between some parameters (e.g. adjacent branches)</li>
+						<li>Mean-field variational model ignores correlation between model parameters</li>
+					</ul>
+					</div>
+					<div class="figure" style="float:right;width:50%">
+						<img style="width:500px;" data-src="heatmap.mcmc.true-tree.svg"/>
+					</div>
 				</section>
 				
 				<section>
-					<h2>Parameter correlation</h2>
+					<h3>Correlation in a larger tree</h3>
 					<img style="width:500px;" data-src="heatmap.fluA.svg"/>
 				</section>
 				
 				<section>
-					<h2>Parameter correlation</h2>
+					<h3>Parameter correlation with variational model</h3>
 					<img style="width:300px;" data-src="heatmap.mcmc.true-tree.svg"/>
 					<img style="width:300px;" data-src="heatmap.vb.mf.true-tree.svg"/>
 					<img style="width:300px;" data-src="heatmap.vb.fullrank.true-tree.svg"/>
 				</section>
 				
 				<section>
-					<h2>Some ideas</h2>
+					<h3>Problems and  ideas</h3>
 					<ul>
+						<li>Short branches are difficult to approximate. Problem also encountered in surrogate and parametric approximations of a single branch</li>
 						<li>Reducing the number parameters</li>
-						<li>Setting covariances to 0</li>
-						<li>We should not expect any correlation between branches that are far appart</li>
+						<li>Setting covariances to 0: we should not expect any correlation between branches that are far appart</li>
 					</ul>
 				</section>
 				
 				<section>
-					<h2>Summary</h2>
+					<h3>Summary</h3>
 					<ul>
 						<li>Testing sparse covariance matrix for full-rank model</li>
 						<li>Not possible in Stan, working on a specialised phylogenetic variational program</li>
@@ -220,14 +244,15 @@
 				</section>
 				
 				<section>
-					<h2>Acknowledgements</h2>
+					<h3>Acknowledgements</h3>
 					<br>
 					<ul>
 						<li>Aaron Darling, University of Technology Sydney<br><br></li>
+						<li>Erick Matsen, Fred Hutchinson Cancer Research<br><br></li>
 						<li>The following organizations:<br><br>
 							<div style="text-align:center">
 								<img data-src="ausgem.png" style="box-shadow:none;height:80px">
-								<img data-src="uts.svg" style="box-shadow:none;background-color:#002b36;height:80px">
+								<img data-src="uts.svg" style="border:none;box-shadow:none;background-color:#002b36;height:80px">
 							</div>
 						</li>
         			</ul>
